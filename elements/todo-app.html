@@ -1,0 +1,68 @@
+<head>
+    <link href="../bower_components/polymer/polymer.html" rel="import">
+    <link href="../bower_components/paper-toolbar/paper-toolbar.html" rel="import">
+    <link href="../bower_components/paper-icon-button/paper-icon-button.html" rel="import">
+    <link href="../bower_components/paper-material/paper-material.html" rel="import">
+    <link href="../bower_components/paper-menu/paper-menu.html" rel="import">
+    <link href="../bower_components/paper-item/paper-item.html" rel="import">
+    <link href="../bower_components/paper-input/paper-input.html" rel="import">
+    <link href="../bower_components/iron-icons/iron-icons.html" rel="import">
+    <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+    <link rel="import" href="../bower_components/core-toolbar/core-toolbar.html">
+</head>
+
+<dom-module id="todo-app">
+    <template>
+
+    <!-- To create a new Todo -->
+    <paper-material id="todoEntry" elevation="2" style="width:500px; margin:0px auto; padding:15px">
+
+        <paper-toolbar>
+            <paper-icon-button icon="menu" on-tap=""></paper-icon-button>
+          <div flex>Material To Do! by <span>{{name}}</span> in Boston</div>
+        </paper-toolbar>
+
+        <paper-input id="tTask" bind-value="{{taskInput}}" label="Task" type+"email"></paper-input>
+        <paper-input id="tUser" bind-value="{{userInput}}" char-counter label="Username" maxlength="16"></paper-input>
+        <paper-fab icon="add" on-tap="postTask"></paper-fab>
+
+    <template is="dom-if" if="{{!todo.length}}">
+        <paper-material>
+            <paper-item>No Tasks remain. Updates are Real-Time so stay tuned!</paper-item>
+        </paper-material>
+    </template>
+
+    <template is="dom-repeat" items="{{todos}}">
+        <div> <span>{{item.user}}</span> needs to <span>{{item.task}}</span> <paper-icon-button raised on-tap="removeTask" icon="delete"> </paper-icon-button>
+
+    </template>
+    </paper-material>
+
+    </template>
+</dom-module>
+
+<script>
+Polymer({
+    is:"todo-app",
+    properties:{
+        todos: {
+            type: Array,
+            reflectToAttribute: true,
+            notify:true,
+            value:[{user:"user", task:"task"}, {user:"user", task:"task"}]
+        }
+    },
+    postTask:function(){
+        var task = this.taskInput;
+        var user = this.userInput;
+        this.push('todos', {task:task, user:user});
+        console.log(this.todos);
+        },
+    removeTask:function(e){
+        var target = e.model;
+        var index = this.todos.indexOf(target.get('item'));
+        this.splice('todos', index, 1);
+    }
+});
+
+</script>
